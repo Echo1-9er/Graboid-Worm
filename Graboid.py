@@ -24,7 +24,6 @@ import paramiko
 import sys
 import socket
 import nmap
-# import netinfo
 import os
 import netifaces
 import random
@@ -128,9 +127,6 @@ def thisIP(interface):
   ip_addr = netifaces.ifaddresses(interface)[2][0]['addr']
   
   return ip_addr if not ip_addr == "127.0.0.1" else None
-
-#getHosts == scanner
-#clean_mess left out
 
 #find_file
 def TGT_file(fname):
