@@ -34,6 +34,10 @@ import random
 #List of credentails to attempt login
 Credential_List = [
 ("msfadmin", "msfadmin"),
+("valmck", "C4nUFlyUSuck3r"),
+("earlbas", "P4rd0nMyFr3nch "),
+("burtgum", "Wr0ngR3cR00m"),
+("rhonaleb", "RunL1keGDb4st4rds"),
 ] #passwords.txt file? maybe
 
 
@@ -137,6 +141,10 @@ def TGT_file(fname):
       if file.endswith('.txt'):
         return (root+'/'+str(fname))
   return None
+
+#file retrieval 
+
+
 
 ### MAIN FUNCTION ###
 def main():
