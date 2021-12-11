@@ -137,17 +137,9 @@ def thisIP(interface):
   for net in networkInter:
     addr = netifaces.ifaddresses(net)[2][0]['addr']
     if not addr == "127.0.0.1":
-      ip_addr = [addr]
+      ip_addr = addr
       break
-  # ip_addr = (([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")] or [[(s.connect(("8.8.8.8", 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) + ["no IP found"])[0]
-
- 
-  return ip_addr
-
-#find_file
-
-# def TGT_file(fname):
-#   dir_path = os.path.dirname(os.path.realpath(__file__))
+  # ip_addr = (([ip for ip in socket.gethostbyname_ex(socke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
   
 #   for root, dirs, files in os.walk(dir_path):
 #     for file in files:
@@ -184,16 +176,17 @@ def main():
     print("Interface: ", interface)
 
     ip_addr = thisIP(interface)
+    ip_addr = print(ip_addr)
     print(ip_addr)
     # networkHosts = scanner()
-    print(networkHosts)
+  print(networkHosts)
     
-    for ip in networkHosts:
-      if ip == ip_addr:
-        networkHosts.remove(ip)
-        break
-      else:
-        continue
+  for ip in networkHosts:
+    if ip == ip_addr:
+      networkHosts.remove(ip)
+      break
+    else:
+      continue
 
     # networkHosts.remove(ip_addr)
     
